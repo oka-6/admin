@@ -127,7 +127,7 @@ class TemplateSystemSeed extends Seeder {
             <div class="col-sm-12 col-md-4 col-lg-3 ">
                 <div class="simple-card-icon">
                     <img src="vendor/oka6/templates/clinic/outline-icons/patient.svg" class="svg"/>
-                    <p>Cadastro ilimitado de pacientes</p>
+                    <p>Cadastro ilimitado de contatos</p>
                 </div>
             </div>
             <div class="col-sm-12 col-md-4 col-lg-3">
@@ -1861,7 +1861,7 @@ https://res.cloudinary.com/vargatt/image/upload/v1570849061/oka6/img/start-scree
                                                 </svg>
                                             </i>
 
-                                            <h4 class="__title">Cadastro ilimitado de pacientes</h4>
+                                            <h4 class="__title">Cadastro ilimitado de contatos</h4>
                                         </div>
                                     </div>
                                     <!-- end item -->
@@ -1977,7 +1977,7 @@ https://res.cloudinary.com/vargatt/image/upload/v1570849061/oka6/img/start-scree
                             </p>
 
                             <ul class="check-list my-md-6">
-                                <li><i class="ico-checked fontello-ok"></i>Cadastro ilimitado de pacientes</li>
+                                <li><i class="ico-checked fontello-ok"></i>Cadastro ilimitado de contatos</li>
                                 <li><i class="ico-checked fontello-ok"></i>Cadastro ilimitado de médicos</li>
                                 <li><i class="ico-checked fontello-ok"></i>Agendamentos integrados a agenda de cada
                                     profissional
