@@ -11,6 +11,9 @@ class Profile extends Model {
 	protected $connection = 'oka6_admin';
 	protected $table = 'profile';
 	
+	const PROFILE_NEW_USER_ID = 31;
+	const RESOURCE_DEFAULT_ID = 44;
+	
 	public static function getById($id) {
 		return self::where('id', (int)$id)->first();
 	}

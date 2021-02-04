@@ -45,6 +45,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 		'active',
 		'profile_id',
 		'resource_default_id',
+		'verified_email',
+		'confirmation_token',
 		'picture',
 		'type',
 		'client_id'
@@ -82,4 +84,25 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 		$this->notify(new ResetPasswordNotification());
 	}
 	
+	public static function generateToken() {
+		return md5(microtime(true));
+	}
+	
+	public function hasConfirmed() {
+		return $this->verified_email == 1 ? true : false;
+	}
+	
+	public static function confirm($user, $token) {
+		if ($user->verified_email == 1) return false;
+		
+		if ($token === $user->confirmation_token) {
+			// User has confirmed his e-mail address.
+			$user->confirmation_token = null;
+			$user->verified_email = 1;
+			$user->save();
+			
+			return true;
+		}
+		return false;
+	}
 }
