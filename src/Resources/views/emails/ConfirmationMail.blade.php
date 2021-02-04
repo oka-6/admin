@@ -146,8 +146,9 @@
                                             <td style="overflow-wrap:break-word;word-break:break-word;padding:10px 20px;font-family:arial,helvetica,sans-serif;" align="left">
 
                                                 <div style="color: #000; line-height: 150%; text-align: center; word-wrap: break-word;">
-                                                    <p style="font-size: 14px; line-height: 150%;"><span style="font-size: 20px; line-height: 30px;">During the webinar, Emily&nbsp;will discuss how to be</span></p>
-                                                    <p style="font-size: 14px; line-height: 150%;"><span style="font-size: 20px; line-height: 30px;">effective in a demanding and competitive market.</span></p>
+                                                    <p style="font-size: 14px; line-height: 150%;"><span style="font-size: 20px; line-height: 30px;">Essa é uma mensagem de confirmação simples!</span></p>
+                                                    <p style="font-size: 16px; line-height: 150%;"><span style="font-size: 20px; line-height: 30px;">Seja bem vindo(a)</span></p>
+                                                    <p style="font-size: 14px; line-height: 150%;"><span style="font-size: 20px; line-height: 30px;">Clique no botão abaixo para confirmar seu e-mail</span></p>
                                                 </div>
 
                                             </td>
