@@ -20,6 +20,7 @@ use Oka6\Admin\Models\Resource;
 use Oka6\Admin\Models\Sequence;
 use Oka6\Admin\Models\User;
 
+use Oka6\Agenda\Models\AgendaProfessional;
 use Oka6\Agenda\Models\Oka6Client;
 use Yajra\Datatables\Datatables;
 
@@ -284,9 +285,11 @@ class UserController extends BaseController {
 		$newUser = User::create($dataForm);
 		
 		$request->request->add(['user_id' => $newUser->id]);
-		$newAgenda = Oka6Client::createClient($request);
-		
+		$newClient = Oka6Client::createNewClientForUsers($request);
+		$updateClientInUser = User::updateClientID($newUser, $newClient->id);
 		$makeUrl =  route('user.confirmMail', [$newUser->id, $newUser->confirmation_token]);
+		
+		$retForProf = Oka6Client::generalizeTableSeedForNewClient($newClient->id, $newUser);
 		
 		Mail::send('Admin::emails.ConfirmationMail', ['url' => $makeUrl], function ($message) use ($newUser) {
 			$message->to($newUser->email)->subject('Confirme seu e-mail');
@@ -295,6 +298,7 @@ class UserController extends BaseController {
 		
 		return \response()->json([
 			'status' => 200,
+			'$retForProf' => $retForProf,
 			'message' => 'Usuário criado com sucesso'
 		]);
 	}
