@@ -273,32 +273,20 @@ class UserController extends BaseController {
 			return response()->json($responseArr, Response::HTTP_BAD_REQUEST);
 		}
 		
-		$dataForm['id'] = Sequence::getSequence('users');
-		$dataForm['name'] = $request->get('name');
-		$dataForm['email'] = $request->get('email');
-		$dataForm['profile_id'] = Profile::PROFILE_NEW_USER_ID;
-		$dataForm['resource_default_id'] = Profile::RESOURCE_DEFAULT_ID;
-		$dataForm['active'] = 1;
-		$dataForm['confirmation_token'] = User::generateToken();
-		$dataForm['verified_email'] = 0;
-		$dataForm['password'] = bcrypt($request->get('password_confirmation'));
-		$newUser = User::create($dataForm);
-		
+		$newUser = User::newUser($request);
 		$request->request->add(['user_id' => $newUser->id]);
 		$newClient = Oka6Client::createNewClientForUsers($request);
-		$updateClientInUser = User::updateClientID($newUser, $newClient->id);
+		User::updateClientID($newUser, $newClient->id);
 		$makeUrl =  route('user.confirmMail', [$newUser->id, $newUser->confirmation_token]);
-		
-		$retForProf = Oka6Client::generalizeTableSeedForNewClient($newClient->id, $newUser);
+		$type = $request->type_business ? $request->type_business : 'default'; // clinic , salon
+		Oka6Client::generalizeTableSeedForNewClient($newClient->id, $newUser, $type);
 		
 		Mail::send('Admin::emails.ConfirmationMail', ['url' => $makeUrl], function ($message) use ($newUser) {
 			$message->to($newUser->email)->subject('Confirme seu e-mail');
 		});
 		
-		
 		return \response()->json([
 			'status' => 200,
-			'$retForProf' => $retForProf,
 			'message' => 'Usuário criado com sucesso'
 		]);
 	}
