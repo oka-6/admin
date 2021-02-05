@@ -282,6 +282,7 @@ class UserController extends BaseController {
 		Oka6Client::generalizeTableSeedForNewClient($newClient->id, $newUser, $type);
 		
 		Mail::send('Admin::emails.ConfirmationMail', ['url' => $makeUrl], function ($message) use ($newUser) {
+			$message->from('admin@oka6.com.br', 'Contato Oka 6');
 			$message->to($newUser->email)->subject('Confirme seu e-mail');
 		});
 		
