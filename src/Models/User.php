@@ -128,8 +128,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 		$dataForm['id'] = Sequence::getSequence('users');
 		$dataForm['name'] = $request->get('name');
 		$dataForm['email'] = $request->get('email');
-		$dataForm['profile_id'] = Profile::PROFILE_NEW_USER_ID;
-		$dataForm['resource_default_id'] = Profile::RESOURCE_DEFAULT_ID;
+		$dataForm['profile_id'] = Profile::getAdminUserClient();
+		$dataForm['resource_default_id'] = Resource::getDashboardForUserClient();
 		$dataForm['active'] = 1;
 		$dataForm['confirmation_token'] = User::generateToken();
 		$dataForm['verified_email'] = 0;

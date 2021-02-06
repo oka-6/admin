@@ -11,11 +11,13 @@ class Profile extends Model {
 	protected $connection = 'oka6_admin';
 	protected $table = 'profile';
 	
-	const PROFILE_NEW_USER_ID = 31;
-	const RESOURCE_DEFAULT_ID = 44;
-	
 	public static function getById($id) {
 		return self::where('id', (int)$id)->first();
+	}
+	
+	public static function getAdminUserClient() {
+		$item = self::where('default', 1)->where('type', 'Agenda')->first();
+		return $item->id;
 	}
 	
 	public static function getProfilesByTypes($type) {
