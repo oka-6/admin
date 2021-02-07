@@ -275,15 +275,15 @@ class UserController extends BaseController {
 		
 		$newUser = User::newUser($request);
 		$request->request->add(['user_id' => $newUser->id]);
-		$newClient = Oka6Client::createNewClientForUsers($request);
+		$newClient = Oka6Client::createClient($request);
 		User::updateClientID($newUser, $newClient->id);
 		$makeUrl =  route('user.confirmMail', [$newUser->id, $newUser->confirmation_token]);
 		$type = $request->type_business ? $request->type_business : 'default'; // clinic , salon
 		Oka6Client::generalizeTableSeedForNewClient($newClient->id, $newUser, $type);
 		
-		Mail::send('Admin::emails.ConfirmationMail', ['url' => $makeUrl], function ($message) use ($newUser) {
-			$message->from('admin@oka6.com.br', 'Contato Oka 6');
-			$message->to($newUser->email)->subject('Confirme seu e-mail');
+		Mail::send('Admin::emails.ConfirmationMail', ['url' => $makeUrl], function ($message) use ($newUser, $type) {
+			$message->from('admin@oka6.com.br', 'Oka6 Sua agenda integrada');
+			$message->to($newUser->email)->subject('Confirme seu e-mail para começar usar a agenda');
 		});
 		
 		return \response()->json([
