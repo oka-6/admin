@@ -22,7 +22,7 @@ class TutorialTableSeed extends Seeder {
 				'description' => '<h1>Bem vindo(a) ao HubCLinic! para começar:</h1>
                 <p>01. Cadastre <a href="/clinic/professional/create">Profissionais</a>.</p>
                 <p>02. Cadastre os <a href="/clinic/services/create">serviços</a> oferecidos por sua clinica.</p>
-                <p>03. Cadastre ou <a href="/clinic/patients/import-view">importe</a>seus <a href="/clinic/patients/create">Pacientes</a>.</p>
+                <p>03. Cadastre ou <a href="/clinic/patients/import-view">importe</a>seus <a href="/clinic/patients/create">Contatos</a>.</p>
                 <p>04. Agora você pode acessar a <a href="/clinic/agenda">agenda</a>, selecionar o profissional e começar criar e gerenciar agendamentos.</p>
                 ',
 				'created_at' => Carbon::now()->format('Y-m-d H:i:s'),

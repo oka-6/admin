@@ -12,7 +12,8 @@ use Illuminate\Notifications\Notifiable;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Oka6\Admin\Notifications\ResetPasswordNotification;
 
-class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract {
+class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
+{
 	use Authenticatable, Authorizable, CanResetPassword, Notifiable;
 	
 	const TABLE = 'users';
@@ -45,6 +46,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 		'active',
 		'profile_id',
 		'resource_default_id',
+		'verified_email',
+		'confirmation_token',
 		'picture',
 		'type',
 		'client_id'
@@ -58,15 +61,18 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 		'password', 'remember_token',
 	];
 	
-	public static function hasUserCreated() {
+	public static function hasUserCreated()
+	{
 		return self::count();
 	}
 	
-	public function resourceDefault() {
+	public function resourceDefault()
+	{
 		return Resource::where('id', $this->resource_default_id)->first();
 	}
 	
-	public function getById($id) {
+	public function getById($id)
+	{
 		return self::where('id', (int)$id)->first();
 	}
 	
@@ -78,8 +84,56 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 	 * @param string $token
 	 * @return void
 	 */
-	public function sendPasswordResetNotification($token) {
+	public function sendPasswordResetNotification($token)
+	{
 		$this->notify(new ResetPasswordNotification());
 	}
 	
+	public static function generateToken()
+	{
+		return md5(microtime(true));
+	}
+	
+	public function hasConfirmed()
+	{
+		return $this->verified_email == 1 ? true : false;
+	}
+	
+	public static function confirm($user, $token)
+	{
+		if ($user->verified_email == 1) return false;
+		
+		if ($token === $user->confirmation_token) {
+			// User has confirmed his e-mail address.
+			$user->confirmation_token = null;
+			$user->verified_email = 1;
+			$user->save();
+			
+			return true;
+		}
+		return false;
+	}
+	
+	public static function updateClientID($user, $newClientID)
+	{
+		if (!$user->client_id) {
+			$user->client_id = $newClientID;
+			$user->save();
+			return true;
+		}
+		return false;
+	}
+	
+	public static function newUser($request){
+		$dataForm['id'] = Sequence::getSequence('users');
+		$dataForm['name'] = $request->get('name');
+		$dataForm['email'] = $request->get('email');
+		$dataForm['profile_id'] = Profile::getAdminUserClient();
+		$dataForm['resource_default_id'] = Resource::getDashboardForUserClient();
+		$dataForm['active'] = 1;
+		$dataForm['confirmation_token'] = User::generateToken();
+		$dataForm['verified_email'] = 0;
+		$dataForm['password'] = bcrypt($request->get('password_confirmation'));
+		return self::create($dataForm);
+	}
 }

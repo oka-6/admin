@@ -10,18 +10,21 @@ use Illuminate\Support\Facades\Log;
 
 class UserAdminObserver {
 	public function creating($model) {
-		
-		$userName = Auth::user()->name;
-		$userId = Auth::user()->id;
-		$log_ = '';
-		$changes = $model->isDirty() ? $model->getDirty() : false;
-		
-		if ($changes) {
-			foreach ($changes as $attr => $value) {
-				$log_ .= "Admin Creating {$model->getTable()} register #{$model->id} field $attr from '{$model->getOriginal($attr)}' to '{$model->$attr}' for User {$userId}#{$userName} \r\n";
-			}
+		if (Auth::check()) {
+			$userName = Auth::user()->name;
+			$userId = Auth::user()->id;
+			$log_ = '';
+			$changes = $model->isDirty() ? $model->getDirty() : false;
 			
-			Log::info($log_);
+			if ($changes) {
+				foreach ($changes as $attr => $value) {
+					$log_ .= "Admin Creating {$model->getTable()} register #{$model->id} field $attr from '{$model->getOriginal($attr)}' to '{$model->$attr}' for User {$userId}#{$userName} \r\n";
+				}
+				
+				Log::info($log_);
+			}
+		}else{
+			Log::info('Novo usuario cadastrado');
 		}
 		
 	}

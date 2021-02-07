@@ -66,11 +66,11 @@ class RefreshRoutes extends Command {
 			}
 		}
 		$resources = [];
+		$resourcesForProfileAgenda = [];
 		
 		foreach ($routes as $key => $route) {
 			
 			$res = Resource::where('route_name', $route['routeName'])->first();
-			
 			if (!$res) {
 				$res = new Resource();
 				$res->id = Sequence::getSequence('resource');
@@ -83,7 +83,6 @@ class RefreshRoutes extends Command {
 				$res->can_be_default = (int)$route['isDefaultAdmin'];
 				$res->order = 0;
 				$res->parent_id = 0;
-				
 				/** Busca o id do parent $res */
 				if ($route['parentRouteNameAdmin']) {
 					$resParent = Resource::getResourceIdByRouteName($route['parentRouteNameAdmin']);
@@ -93,6 +92,10 @@ class RefreshRoutes extends Command {
 				}
 				$res->save();
 				$bar->advance();
+			}
+			$type = explode('.', $route['routeName'], 3);
+			if($type[0] == "agenda" && $type[1] != "oka6"){
+				$resourcesForProfileAgenda[] = $res->id;
 			}
 			$resources[] = $res->id;
 		}
@@ -106,6 +109,8 @@ class RefreshRoutes extends Command {
 			$newResources[] = $req;
 		}
 		Profile::where('id', User::PROFILE_ID_ROOT)->update(['resources_allow' => array_map('intval', $newResources)]);
+		Profile::where('default', 1)->where('type', 'Agenda')->update(['resources_allow' => $resourcesForProfileAgenda]);
+		
 		$bar->finish();
 	}
 	

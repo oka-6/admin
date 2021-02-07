@@ -5,10 +5,13 @@ namespace Oka6\Admin\Http\Controllers;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Mail;
 use Image;
 
 use Oka6\Admin\Http\Library\ResourceAdmin;
@@ -17,6 +20,8 @@ use Oka6\Admin\Models\Resource;
 use Oka6\Admin\Models\Sequence;
 use Oka6\Admin\Models\User;
 
+use Oka6\Agenda\Models\AgendaProfessional;
+use Oka6\Agenda\Models\Oka6Client;
 use Yajra\Datatables\Datatables;
 
 
@@ -107,9 +112,7 @@ class UserController extends BaseController {
 		$request->user()->create($dataForm);
 		toastr()->success('Usuário Criado!', 'Sucesso');
 		return redirect(route('admin.users.index'));
-		
 	}
-	
 	
 	/**
 	 * Show the form for editing the specified resource.
@@ -253,6 +256,53 @@ class UserController extends BaseController {
 		$user->fill($dataForm)->save();
 		toastr()->success('Usuário Atualizado com sucesso', 'Sucesso');
 		return redirect(route('admin.users.form-profile'));
+	}
+	
+	
+	public  function newUser(Request $request)
+	{
+		$validator = \Validator::make($request->all(), [
+			'name' => 'required',
+			'password' => 'required|min:6|confirmed',
+			'password_confirmation' => 'required|min:6|',
+			'email' => 'required|unique:oka6_admin.users'
+		]);
+		
+		if ($validator->fails()) {
+			$responseArr['message'] = $validator->errors();;
+			return response()->json($responseArr, Response::HTTP_BAD_REQUEST);
+		}
+		
+		$newUser = User::newUser($request);
+		$request->request->add(['user_id' => $newUser->id]);
+		$newClient = Oka6Client::createClient($request);
+		User::updateClientID($newUser, $newClient->id);
+		$makeUrl =  route('user.confirmMail', [$newUser->id, $newUser->confirmation_token]);
+		$type = $request->type_business ? $request->type_business : 'default'; // clinic , salon
+		Oka6Client::generalizeTableSeedForNewClient($newClient->id, $newUser, $type);
+		
+		Mail::send('Admin::emails.ConfirmationMail', ['url' => $makeUrl], function ($message) use ($newUser, $type) {
+			$message->from('admin@oka6.com.br', 'Oka6 Sua agenda integrada');
+			$message->to($newUser->email)->subject('Confirme seu e-mail para começar usar a agenda');
+		});
+		
+		return \response()->json([
+			'status' => 200,
+			'message' => 'Usuário criado com sucesso'
+		]);
+	}
+	
+	public function confirmMail($userID, $token)
+	{
+		$user = User::where('id', (int)$userID)->first();
+		
+		if (User::confirm($user, $token)) {
+			$message = 'Seu e-mail foi confirmado! Faça o login agora';
+		} else {
+			$message = 'Tivemos um problema ao confirmar seu e-mail';
+		}
+		
+		return redirect()->route('login')->withMessage($message);
 	}
 	
 	

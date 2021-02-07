@@ -34,7 +34,7 @@ Route::group(['prefix' => $prefix_url, 'middleware' => ['web', 'auth', 'Oka6\Adm
 	Route::post('/resources', 'Oka6\Admin\Http\Controllers\ResourcesController@store')->name('admin.resources.store')->where(['iconAdmin' => 'fas fa-floppy-o', 'nameAdmin' => 'Save Resource']);
 	Route::get('/resources/{profile}', 'Oka6\Admin\Http\Controllers\ResourcesController@edit')->name('admin.resources.edit')->where(['iconAdmin' => 'fas fa-edit', 'parentRouteNameAdmin' => 'admin.resources.index', 'nameAdmin' => 'Resource Edit']);
 	Route::post('/resources/{id}', 'Oka6\Admin\Http\Controllers\ResourcesController@update')->name('admin.resources.update')->where(['iconAdmin' => 'fas fa-edit', 'parentRouteNameAdmin' => 'admin.resources.index', 'nameAdmin' => 'Resource Update']);
-	
+
 	Route::fallback(function () {
 		$prefix_url = \Illuminate\Support\Facades\Config::get('admin.prefix_url');
 		return redirect("/$prefix_url/page-not-found");
@@ -56,6 +56,11 @@ Route::group(['prefix' => $prefix_url, 'middleware' => ['web', 'auth']], functio
 	
 });
 
+// API ROUTES
+Route::group(['prefix' => 'api', 'middleware' => ['api']], function () {
+	Route::post('user/create-new-user', 'Oka6\Admin\Http\Controllers\UserController@newUser')->name('user.newUser');
+});
+
 
 Route::group(['middleware' => ['web']], function () {
 	
@@ -67,10 +72,10 @@ Route::group(['middleware' => ['web']], function () {
 //    Route::get('/blog/tag/{tag}', 'Oka6\Admin\Http\Controllers\BlogController@blogTag')->name('blogTag');
 //    Route::get('/blog/ultimos-posts', 'Oka6\Admin\Http\Controllers\BlogController@getLatestPosts')->name('blogLatestPost');
 //    Route::get('/blog/categoria/{cat}', 'Oka6\Admin\Http\Controllers\BlogController@blogCategory')->name('blogCategory');
-	
-	Route::get('/tema/{template}', 'Oka6\Admin\Http\Controllers\HomeController@returnLandingDefault')->name('template');
-	Route::get('/tema/style/{template}', 'Oka6\Admin\Http\Controllers\HomeController@getCssFile')->name('templateStyle');
-	Route::get('/tema/js/{template}', 'Oka6\Admin\Http\Controllers\HomeController@getJsFile')->name('templateJs');
+
+//	Route::get('/tema/{template}', 'Oka6\Admin\Http\Controllers\HomeController@returnLandingDefault')->name('template');
+//	Route::get('/tema/style/{template}', 'Oka6\Admin\Http\Controllers\HomeController@getCssFile')->name('templateStyle');
+//	Route::get('/tema/js/{template}', 'Oka6\Admin\Http\Controllers\HomeController@getJsFile')->name('templateJs');
 	///** Authentication Routes...  */
 	Route::get('login', 'Oka6\Admin\Http\Controllers\Auth\LoginController@showLoginForm')->name('login');
 	Route::post('login', 'Oka6\Admin\Http\Controllers\Auth\LoginController@login');
@@ -80,6 +85,7 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('password/reset', 'Oka6\Admin\Http\Controllers\Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
 	Route::post('password/email', 'Oka6\Admin\Http\Controllers\Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
 	Route::get('password/reset/{token}', 'Oka6\Admin\Http\Controllers\Auth\ResetPasswordController@showResetForm')->name('password.reset');
-	
+	Route::get('user/{user}/{token}/confirm',  'Oka6\Admin\Http\Controllers\UserController@confirmMail')->name('user.confirmMail');
 	
 });
+

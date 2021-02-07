@@ -4,7 +4,8 @@ namespace Oka6\Admin\Models;
 
 use Jenssegers\Mongodb\Eloquent\Model;
 
-class Resource extends Model {
+class Resource extends Model
+{
 	
 	const TABLE = 'resource';
 	protected $fillable = ['id', 'name', 'menu', 'is_menu', 'icon', 'can_be_default', 'parent_id'];
@@ -12,14 +13,16 @@ class Resource extends Model {
 	protected $connection = 'oka6_admin';
 	
 	
-	public static function getResourcesByProfiles($profile, $controller) {
+	public static function getResourcesByProfiles($profile, $controller)
+	{
 		$profile = Profile::where('id', (int)$profile)->first();
 		return self::whereIn('id', $profile->resources_allow)
 			->where('controller_method', $controller)
 			->get();
 	}
 	
-	public static function getResourcesByRouteName($profile, $routeName) {
+	public static function getResourcesByRouteName($profile, $routeName)
+	{
 		$profile = Profile::where('id', (int)$profile)->first();
 		return self::select('resource.*')
 			->where('route_name', $routeName)
@@ -28,12 +31,19 @@ class Resource extends Model {
 		
 	}
 	
-	public static function getResourcesByControllerMethod($ControllerMethod) {
+	public static function getResourcesByControllerMethod($ControllerMethod)
+	{
 		return self::where('controller_method', $ControllerMethod)->first();
-		
 	}
 	
-	public static function getItensMenuByParentAndProfile($parentID, $profileId) {
+	public static function getDashboardForUserClient()
+	{
+		$r = self::where('route_name', 'agenda.dashboard.index')->first();
+		return $r->id;
+	}
+	
+	public static function getItensMenuByParentAndProfile($parentID, $profileId)
+	{
 		$profile = Profile::where('id', (int)$profileId)->first();
 		return self::where('parent_id', (int)$parentID)
 			->where('is_menu', 1)
@@ -42,14 +52,16 @@ class Resource extends Model {
 			->get();
 	}
 	
-	public static function buildBreadCrumb($resource, $profileId) {
+	public static function buildBreadCrumb($resource, $profileId)
+	{
 		return self::where('id', $resource->parent_id)
 			//->join('profile_has_resources', 'profile_has_resources.resource_id','resources.id')
 			//->where('profile_id', $profileId)
 			->first();
 	}
 	
-	public static function getResourceIdByRouteName($routeName) {
+	public static function getResourceIdByRouteName($routeName)
+	{
 		return self::where('route_name', $routeName)
 			->orWhere('name', $routeName)
 			->select('id')
@@ -62,7 +74,8 @@ class Resource extends Model {
 	 *
 	 * @return array
 	 */
-	public function getQueueableRelations() {
+	public function getQueueableRelations()
+	{
 		// TODO: Implement getQueueableRelations() method.
 	}
 }
