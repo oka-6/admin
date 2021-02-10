@@ -35,6 +35,18 @@
             text-overflow: ellipsis;
             font-family: poiret-one, sans-serif;
         }
+
+        .payment-alert{
+            margin-bottom: 1px;
+            text-align: center;
+            font-size: 1.3em;
+        }
+        .payment-alert a{
+            margin-left: 5px;
+            text-decoration: underline;
+            color: #fff;
+            font-weight: bold;
+        }
     </style>
     <!--script src="//use.edgefonts.net/poiret-one.js"></script-->
 </head>
@@ -56,6 +68,11 @@
     <!-- Topbar header - style you can find in pages.scss -->
     <!-- ============================================================== -->
     <header class="topbar">
+
+        @hasSection('start-bar-top')
+            @yield('start-bar-top')
+        @endif
+
         <nav class="navbar top-navbar navbar-expand-md navbar-dark">
             <div class="navbar-header">
                 <!-- This is for the sidebar toggle which is visible on mobile only -->
@@ -67,7 +84,6 @@
                 <!-- ============================================================== -->
                 <div class="navbar-brand">
                     <a href="#" class="logo">
-                        <!-- Logo text -->
                         <span class="logo-text">
                            <span class="logo-name">{{\Illuminate\Support\Facades\Config::get('admin.logo_label')}}</span>
                          </span>
@@ -539,6 +555,9 @@
 </script>
 
 <!--script src="//use.edgefonts.net/sail.js"></script-->
+@hasSection('tawnk')
+    @yield('tawnk')
+@endif
 </body>
 
 </html>
