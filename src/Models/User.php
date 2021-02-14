@@ -71,9 +71,12 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 		return Resource::where('id', $this->resource_default_id)->first();
 	}
 	
-	public function getById($id)
-	{
+	public function getById($id) {
 		return self::where('id', (int)$id)->first();
+	}
+	
+	public static function getBy_Id($_id='6028205f2491f84d963f5f21'){
+		return self::where('_id',new \MongoDB\BSON\ObjectId($_id))->first();
 	}
 	
 	

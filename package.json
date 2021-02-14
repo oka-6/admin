@@ -78,6 +78,7 @@
         "wnumb": "^1.1.0"
     },
     "dependencies": {
-        "imagemin-pngquant": "^5.0.1"
+        "imagemin-pngquant": "^5.0.1",
+        "theme-color": "^0.1.1"
     }
 }
