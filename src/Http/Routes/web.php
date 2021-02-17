@@ -57,7 +57,8 @@ Route::group(['prefix' => $prefix_url, 'middleware' => ['web', 'auth']], functio
 });
 
 // API ROUTES
-Route::group(['prefix' => 'api', 'middleware' => ['api']], function () {
+
+Route::group(['prefix' => 'api', 'middleware' => ['api', 'Oka6\Admin\Http\Middleware\Cors']], function () {
 	Route::post('user/create-new-user', 'Oka6\Admin\Http\Controllers\UserController@newUser')->name('user.newUser');
 });
 
