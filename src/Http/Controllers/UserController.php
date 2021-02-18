@@ -64,6 +64,11 @@ class UserController extends BaseController {
 		return view('Admin::backend.users.index', compact('hasAdd', 'hasEdit'));
 	}
 	
+	public static function userIsAuth()
+	{
+		return Auth::user();
+	}
+	
 	/**
 	 * Show the form for creating a new resource.
 	 *

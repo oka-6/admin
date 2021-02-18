@@ -79,6 +79,14 @@
                                     <div class="col-xs-12 p-b-20">
                                         <button class="btn btn-block btn-lg btn-dark" type="submit">Entrar</button>
                                     </div>
+
+                                    <div class="mt-2"></div>
+                                    <p>Ou</p>
+                                    <div class="mt-2"></div>
+
+                                    <div class="col-xs-12 " >
+                                        <a href="/" class="btn  btn-secondary text-white" type="submit">Criar conta</a>
+                                    </div>
                                 </div>
 
                             </form>
