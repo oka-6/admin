@@ -36,12 +36,13 @@
             font-family: poiret-one, sans-serif;
         }
 
-        .payment-alert{
+        .payment-alert {
             margin-bottom: 1px;
             text-align: center;
             font-size: 1.3em;
         }
-        .payment-alert a{
+
+        .payment-alert a {
             margin-left: 5px;
             text-decoration: underline;
             color: #fff;
@@ -85,7 +86,13 @@
                 <div class="navbar-brand">
                     <a href="#" class="logo">
                         <span class="logo-text">
-                           <span class="logo-name">{{\Illuminate\Support\Facades\Config::get('admin.logo_label')}}</span>
+                           <span class="logo-name">
+                               @hasSection('application_name')
+                                   @yield('application_name')
+                               @else
+                                   {{\Illuminate\Support\Facades\Config::get('admin.logo_label')}}
+                               @endif
+                           </span>
                          </span>
                     </a>
                     <a class="sidebartoggler d-none d-md-block" href="javascript:void(0)"
@@ -545,12 +552,21 @@
         })
     }
 
+    function headerNotifyPayment() {
+        if($('.payment-alert').length){
+            $('.page-wrapper').css('padding-top', '115px');
+        }
+        $(document).off('click', '.payment-alert .close').on('click', '.payment-alert .close', function () {
+            $('.page-wrapper').css('padding-top', '65px');
+        })
+    }
 
     themeSet();
     confTheme();
     openMenuActive();
     $(function () {
         setSidebar();
+        headerNotifyPayment()
     });
 </script>
 

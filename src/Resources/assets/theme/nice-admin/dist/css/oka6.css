@@ -171,3 +171,33 @@ form .card-body {
     transition-duration: 0.3s;
 }
 
+
+.attention-animate{
+    animation: 1s wiggle ease both;
+}
+
+@keyframes wiggle {
+    0% {
+        transform: rotate(-3deg);
+        box-shadow: 0 2px 2px rgba(0,0,0,.2);
+    }
+    20% {
+        transform: rotate(15deg);
+    }
+    40% {
+        transform: rotate(-10deg);
+    }
+    60% {
+        transform: rotate(5deg);
+    }
+    90% {
+        transform: rotate(-1deg);
+    }
+    100% {
+        transform: rotate(0);
+    }
+}
+
+body .payment-alert .page-wrapper{
+    padding-top: 100px;
+}

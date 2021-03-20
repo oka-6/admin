@@ -286,7 +286,7 @@ class UserController extends BaseController {
 		$type = $request->type_business ? $request->type_business : 'default'; // clinic , salon
 		Oka6Client::generalizeTableSeedForNewClient($newClient->id, $newUser, $type);
 		
-		Mail::send('Admin::emails.ConfirmationMail', ['url' => $makeUrl], function ($message) use ($newUser, $type) {
+		Mail::send('Admin::emails.ConfirmationMail', ['url' => $makeUrl, 'mailUser' => $newUser->email], function ($message) use ($newUser, $type) {
 			$message->from('admin@oka6.com.br', 'Oka6 Sua agenda integrada');
 			$message->to($newUser->email)->subject('Confirme seu e-mail para começar usar a agenda');
 		});
@@ -301,13 +301,14 @@ class UserController extends BaseController {
 	{
 		$user = User::where('id', (int)$userID)->first();
 		
+		
 		if (User::confirm($user, $token)) {
 			$message = 'Seu e-mail foi confirmado! Faça o login agora';
 		} else {
 			$message = 'Tivemos um problema ao confirmar seu e-mail';
 		}
 		
-		return redirect()->route('login')->withMessage($message);
+		return redirect()->route('login', ['email' => $user->email])->withMessage($message);
 	}
 	
 	

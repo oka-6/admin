@@ -1,4 +1,4 @@
-<style type="text/css">
+c<style type="text/css">
     a { color: #0000ee; text-decoration: underline; }
     @media only screen and (min-width: 670px) {
         .u-row {
@@ -90,7 +90,7 @@
                                             <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
 
                                                 <h1 style="margin: 0px; color: #000000; line-height: 140%; text-align: left; word-wrap: break-word; font-weight: normal; font-family: arial,helvetica,sans-serif; font-size: 22px;">
-                                                    OKA6
+                                                    Oka6
                                                 </h1>
 
                                             </td>
@@ -182,7 +182,7 @@
 
                                                 <div align="center">
                                                     <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing: 0; border-collapse: collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;font-family:arial,helvetica,sans-serif;"><tr><td style="font-family:arial,helvetica,sans-serif;" align="center"><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="" style="height:85px; v-text-anchor:middle; width:332px;" arcsize="59%" stroke="f" fillcolor="#282929"><w:anchorlock/><center style="color:#FFF;font-family:arial,helvetica,sans-serif;"><![endif]-->
-                                                    <a href="{{$url}}" target="_blank" style="box-sizing: border-box;display: inline-block;font-family:arial,helvetica,sans-serif;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFF; background-color: #282929; border-radius: 50px; -webkit-border-radius: 50px; -moz-border-radius: 50px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;">
+                                                    <a href="{{$url}}?mail={{$mailUser}}" target="_blank" style="box-sizing: border-box;display: inline-block;font-family:arial,helvetica,sans-serif;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFF; background-color: #282929; border-radius: 50px; -webkit-border-radius: 50px; -moz-border-radius: 50px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;">
                                                         <span style="display:block;padding:20px 50px;line-height:150%;"><strong><span style="font-size: 30px; line-height: 45px;">Confirmar Email</span></strong></span>
                                                     </a>
                                                     <!--[if mso]></center></v:roundrect></td></tr></table><![endif]-->

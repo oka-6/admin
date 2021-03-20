@@ -84,7 +84,7 @@
                                     <p>Ou</p>
                                     <div class="mt-2"></div>
 
-                                    <div class="col-xs-12 " >
+                                    <div class="col-xs-12 ">
                                         <a href="/" class="btn  btn-secondary text-white" type="submit">Criar conta</a>
                                     </div>
                                 </div>
@@ -116,3 +116,16 @@
 
 @endsection
 
+@section('script')
+    <script>
+
+        window.onload = function () {
+            const mail = document.getElementById('email');
+            const param = window.location.search.includes('email') ? decodeURIComponent(window.location.search.replace('?email=', '')) : '';
+            if (param) {
+                mail.value = param
+            }
+        };
+
+    </script>
+@endsection
