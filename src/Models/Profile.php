@@ -15,9 +15,18 @@ class Profile extends Model {
 		return self::where('id', (int)$id)->first();
 	}
 	
-	public static function getAdminUserClient() {
+	public static function getAdminUserClient($getID = true) {
 		$item = self::where('default', 1)->where('type', 'Agenda')->first();
-		return $item->id;
+		if($getID){
+			return $item->id;
+		}else{
+			return $item;
+		}
+	}
+	
+	public static function getProfilesByUserClient($type)
+	{
+		return self::where('type', $type)->get();
 	}
 	
 	public static function getProfilesByTypes($type) {

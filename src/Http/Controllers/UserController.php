@@ -211,9 +211,11 @@ class UserController extends BaseController {
 		$dataForm = [];
 		$auth = Auth::user();
 		$user = User::firstOrNew(['id' => (int)$auth->id]);
+		$dataRequest = collect($request->all())->forget('image_user')->toArray();
+		$request = new Request($dataRequest);
+		
 		
 		$this->validate($request, [
-			'picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
 			'name' => 'required',
 			'resource_default_id' => 'required',
 			'email' => 'required',
@@ -230,24 +232,6 @@ class UserController extends BaseController {
 		]);
 		
 		$dataForm['password'] = bcrypt($request->get('password'));
-		if ($request->hasFile('picture')) {
-			$image = $request->file('picture');
-			$input['picture'] = time() . '.' . $image->getClientOriginalExtension();
-			$destinationPath = storage_path('/app/public/thumbnail');
-			
-			if (!File::isDirectory($destinationPath)) {
-				File::makeDirectory($destinationPath, 0777);
-			}
-			$img = Image::make($image->getRealPath());
-			$img->resize(100, 100, function ($constraint) {
-				
-				$constraint->aspectRatio();
-				
-			})->save($destinationPath . '/' . $input['picture']);
-			
-			$base64 = 'data:image/' . $image->getClientOriginalExtension() . ';base64,' . base64_encode($img);
-			$dataForm['picture'] = $base64;
-		}
 		
 		if (!isset($request->password)) {
 			unset($dataForm['password']);
@@ -257,6 +241,7 @@ class UserController extends BaseController {
 		$dataForm['lastname'] = $request->get('lastname');
 		$dataForm['email'] = $request->get('email');
 		$dataForm['cell_phone'] = $request->get('cell_phone');
+		$dataForm['picture'] = $request->get('picture');
 		$dataForm['resource_default_id'] = $request->get('resource_default_id');
 		$user->fill($dataForm)->save();
 		toastr()->success('Usuário Atualizado com sucesso', 'Sucesso');

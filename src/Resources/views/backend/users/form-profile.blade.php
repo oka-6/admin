@@ -79,18 +79,25 @@
                     <span class="text-danger">{{$errors->first('old_password')}}</span>
                 @endif
             </div>
-            <div class="col-md-12 form-group">
+
+            <div class="col-md-3 form-group">
                 <label for="title">Foto Perfil</label>
-                <div class="input-group">
-                    <span class="input-group-btn">
-                    <span class="btn btn-primary" onclick="$(this).parent().find('input[type=file]').click();">Selecionar</span>
-                        <input id="picture" name="picture"
-                               onchange="$(this).parent().parent().find('.form-control').html($(this).val().split(/[\\|/]/).pop());"
-                               style="display: none;" type="file">
-                    </span>
-                    <span class="form-control"></span>
+                <div class="user-avatar">
+                    <div onclick="document.getElementById('image_user').click()"
+                         class="user-avatar-overlay">
+                        @if (isset($user->picture) && $user->picture)
+                            <img class="src-image-user" src="{{$user->picture}}" alt="">
+                        @else
+                            <img class="src-image-user"
+                                 src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y&s=400"
+                                 alt="">
+                        @endif
+                    </div>
                 </div>
             </div>
+            <input style="display: none" type="file"  readonly accept="image/*" name="image_user" id="image_user">
+            <input type="hidden" name="picture" value="{{$user->picture ? $user->picture : ''}}" id="image_user_url">
+
             <div class="col-md-12 text-right">
                 <button type="submit" class="btn btn-success">Salvar</button>
             </div>
@@ -99,6 +106,45 @@
 </div>
 @section('style_head')
     <link rel="stylesheet" href="{{mix('/vendor/oka6/admin/css/select2.css')}}">
+    <style>
+        .user-avatar {
+            width: 160px;
+            height: 150px;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .user-avatar .user-avatar-overlay {
+            display: none;
+        }
+
+        .user-avatar .user-avatar-overlay:hover {
+            cursor: pointer;
+            transform: scale(1.01);
+            opacity: 0.7;
+            transition: all 1s;
+        }
+
+        .user-avatar .user-avatar-overlay {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            fill: #205488;
+        }
+
+        .user-avatar .user-avatar-overlay img {
+            width: 156px;
+            height: 156px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 7px solid #e9ecef;
+            box-shadow: 0px 2px 5px #c7c7c7;
+            margin-top: 6px;
+        }
+    </style>
 @endsection
 @section('script_footer_end')
     <script type="text/javascript" src={{mix('/vendor/oka6/admin/js/select2.js')}}></script>
@@ -133,6 +179,31 @@
                     }
                 })
             }
+
+            function prepareImageBase64(data, quality){
+                return new Promise(async (resolve, reject) => {
+                    let url = await URL.createObjectURL(data),
+                        canvas = document.createElement('canvas'),
+                        ctx = canvas.getContext("2d"),
+                        img = new Image;
+                    img.src = url;
+                    img.onload = () => {
+                        canvas.height = img.height;
+                        canvas.width = img.width;
+                        ctx.drawImage(img, 0, 0);
+                        let dataURL = canvas.toDataURL("image/jpeg", quality);
+                        resolve(dataURL)
+                    };
+
+                })
+            }
+
+            $('#image_user').on('change', function(e){
+                prepareImageBase64(e.target.files[0], 0.4).then((url) => {
+                    $('.src-image-user').attr('src', url);
+                    $('#image_user_url').val(url);
+                });
+            });
 
             function populateResourcesDefault(arrayResources) {
                 var jsonData = arrayResources;
