@@ -42,12 +42,17 @@ $theme6: #233242 !important;
             color: $bg;
         }
 
+
         #main-wrapper {
             .fc-button-primary:disabled, .btn-primary, .page-item.active .page-link, .page-link:hover,
             .btn-info,
             .fc-button-primary:not(:disabled).fc-button-active, .fc-button-primary:not(:disabled):active, .custom-control-input:checked ~ .custom-control-label::before {
                 background-color: $bg;
                 border-color: $bg;
+            }
+
+            .topbar .top-navbar .navbar-header, .topbar .top-navbar .navbar-header[data-logobg=skin5]{
+                background-color: $bg;
             }
 
             .btn-success, .bg-success, .badge-success, .bootstrap-switch .bootstrap-switch-handle-on.bootstrap-switch-success {
