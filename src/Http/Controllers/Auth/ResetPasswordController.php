@@ -49,7 +49,10 @@ class ResetPasswordController extends Controller {
 	}
 	
 	public function showResetForm(Request $request, $token = null) {
-		return view('Admin::auth.passwords.reset')->with(
+		
+		$user = \Oka6\Admin\Models\PasswordReset::where('token' ,$request->token)->first();
+		
+		return view('Admin::auth.passwords.reset', compact('user'))->with(
 			['token' => $token, 'email' => $request->email]
 		);
 	}
@@ -61,14 +64,14 @@ class ResetPasswordController extends Controller {
 			'token' => 'required|string'
 		]);
 		
-		$passwordReset = PasswordReset::where('email', $request->email)->where('token', $request->token)->first();
+		$passwordReset = \Oka6\Admin\Models\PasswordReset::where('email', $request->email)->where('token', $request->token)->first();
 		
 		if (!$passwordReset) {
 			toastr()->error('Token inválido', 'Erro');
 			return back();
 		}
 		
-		$user = User::where('email', $passwordReset->email)->first();
+		$user = \Oka6\Admin\Models\User::where('email', $passwordReset->email)->first();
 		
 		if (!$user) {
 			toastr()->error('não foi encontrado usuário com este e-mail.');

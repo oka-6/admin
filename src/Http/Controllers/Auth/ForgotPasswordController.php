@@ -33,18 +33,18 @@ class ForgotPasswordController extends Controller {
 	}
 	
 	public function sendResetLinkEmail(Request $request) {
-		$user = User::where('email', $request->email)->first();
+		$user = \Oka6\Admin\Models\User::where('email', $request->email)->first();
 		if (!$user) {
 			toastr()->error('não foi encontrado usuário com este e-mail.');
 			return back();
 		}
-		$passwordReset = PasswordReset::create(['email' => $user->email, 'token' => $user->remember_token]);
+		$passwordReset = \Oka6\Admin\Models\PasswordReset::create(['email' => $user->email, 'token' => md5(microtime(true))]);
+		//dd($passwordReset->token);
 		$user->notify(new ResetPasswordNotification($passwordReset));
-		
 		
 		toastr()->success('você recebeu um e-mail para recuperar a senha.');
 		
-		return redirect(route('login'));
+		return back();
 	}
 	
 	//Shows form to request password reset

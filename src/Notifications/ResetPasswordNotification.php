@@ -14,7 +14,10 @@ class ResetPasswordNotification extends Notification {
      *
      * @return void
      */
-    public function __construct()  {
+    private $input = null;
+    
+    public function __construct($inputToken)  {
+    	$this->input = $inputToken;
     }
 
     /**
@@ -36,12 +39,11 @@ class ResetPasswordNotification extends Notification {
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable) {
-
         return (new MailMessage)
             ->subject('Alterar Senha ')
             ->line('Você está recebendo este e-mail porque recebemos um pedido de redefinição de senha para sua conta.')
-            ->action('Resetar Senha', url(config('app.url').route('password.reset', $notifiable->remember_token, false)))
-            ->line('Se você não solicitou uma alteração da senha, nenhuma ação adicional é necessária.');
+			->action('Resetar Senha', route('password.reset', $this->input->token))
+			->line('Se você não solicitou uma alteração da senha, nenhuma ação adicional é necessária.');
     }
 
 

@@ -56,11 +56,7 @@ Route::group(['prefix' => $prefix_url, 'middleware' => ['web', 'auth']], functio
 	
 });
 
-// API ROUTES
 
-Route::group(['prefix' => 'api', 'middleware' => ['api', 'Oka6\Admin\Http\Middleware\Cors']], function () {
-	Route::post('user/create-new-user', 'Oka6\Admin\Http\Controllers\UserController@newUser')->name('user.newUser');
-});
 
 
 Route::group(['middleware' => ['web']], function () {
@@ -86,7 +82,6 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('password/reset', 'Oka6\Admin\Http\Controllers\Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
 	Route::post('password/email', 'Oka6\Admin\Http\Controllers\Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
 	Route::get('password/reset/{token}', 'Oka6\Admin\Http\Controllers\Auth\ResetPasswordController@showResetForm')->name('password.reset');
-	Route::get('user/{user}/{token}/confirm',  'Oka6\Admin\Http\Controllers\UserController@confirmMail')->name('user.confirmMail');
 	
 });
 
